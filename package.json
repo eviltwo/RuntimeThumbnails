@@ -1,0 +1,15 @@
+{
+  "name": "com.eviltwo.runtime-thumbnails",
+  "displayName": "Runtime Thumbnails",
+  "version": "1.0.0",
+  "unity": "6000.3",
+  "description": "Runtime Thumbnails",
+  "author": {
+    "name": "DAIKI(eviltwo)",
+    "url": "https://github.com/eviltwo"
+  },
+  "keywords": [
+  ],
+  "dependencies": {
+  }
+}
