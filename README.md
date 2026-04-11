@@ -1,17 +1,6 @@
 # RuntimeThumbnails
 
-Generate
-Texture2D
-from
-Game
-Object
-or
-prefab
-using
-a
-camera
-at
-runtime.
+Generate Texture2D from Game Object or prefab using a camera at runtime.
 
 ```
 // Camera view
