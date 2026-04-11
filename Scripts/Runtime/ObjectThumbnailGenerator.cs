@@ -7,7 +7,8 @@ namespace eviltwo.RuntimeThumbnails
     {
         public GameObject TargetObject;
 
-        public Vector3 CapturePosition = new(1000, 1000, 1000);
+        [Tooltip("Position to move the object to during capture. Should be far enough from the scene so other objects are not visible.")]
+        public Vector3 IsolationPosition = new(1000, 1000, 1000);
 
         public Vector3 CameraRotation = new(45, 45, 0);
 
@@ -19,7 +20,7 @@ namespace eviltwo.RuntimeThumbnails
 
         public override Texture2D GenerateThumbnail()
         {
-            using (new ObjectAdjustScope(TargetObject.transform, CapturePosition))
+            using (new ObjectAdjustScope(TargetObject.transform, IsolationPosition))
             {
                 // Calculate object size
                 Bounds bounds;

@@ -4,15 +4,21 @@ namespace eviltwo.RuntimeThumbnails
 {
     public class PrefabThumbnailGenerator : ObjectThumbnailGenerator
     {
-        public GameObject TargetPrefab;
-
         public override Texture2D GenerateThumbnail()
         {
-            var instance = Instantiate(TargetPrefab);
+            var instance = Instantiate(TargetObject);
             var previousTarget = TargetObject;
             TargetObject = instance;
             var tex = base.GenerateThumbnail();
-            Destroy(instance);
+            if (Application.isPlaying)
+            {
+                Destroy(instance);
+            }
+            else
+            {
+                DestroyImmediate(instance);
+            }
+
             TargetObject = previousTarget;
             return tex;
         }
