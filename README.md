@@ -1,9 +1,29 @@
 # RuntimeThumbnails
-Generate Texture2D from Game Object or prefab using a camera at runtime.
+
+Generate
+Texture2D
+from
+Game
+Object
+or
+prefab
+using
+a
+camera
+at
+runtime.
 
 ```
-tex = objectThumbnailGenerator.GenerateObjectThumbnail(targetObject);
-tex = objectThumbnailGenerator.GeneratePrefabThumbnail(targetPrefab);
+// Camera view
+tex = thumbnailGenerator.Generate();
+
+// Game Object
+objectThumbnailGenerator.Target = targetObject;
+tex = objectThumbnailGenerator.Generate();
+
+// prefab
+prefabThumbnailGenerator.Prefab = targetPrefab;
+tex = prefabThumbnailGenerator.Generate();
 ```
 
 <img width="99" height="98" alt="image" src="https://github.com/user-attachments/assets/78d3cfd3-955b-4c6c-9590-fdda13cc1abd" />
@@ -12,6 +32,7 @@ tex = objectThumbnailGenerator.GeneratePrefabThumbnail(targetPrefab);
 <img width="200" alt="image" src="https://github.com/user-attachments/assets/1e4165ec-9fc4-42a1-ac5a-0183b5f21fec" />
 
 # Import via UPM
+
 ```
 https://github.com/eviltwo/RuntimeThumbnails.git
 ```
