@@ -20,8 +20,11 @@ namespace eviltwo.RuntimeThumbnails
 
         public override Texture2D GenerateThumbnail()
         {
-            using (new ObjectAdjustScope(TargetObject.transform, IsolationPosition))
+            using (new TransformRestoreScope(TargetObject.transform))
             {
+                TargetObject.transform.SetParent(null);
+                TargetObject.transform.SetPositionAndRotation(IsolationPosition, Quaternion.identity);
+
                 // Calculate object size
                 Bounds bounds;
                 if (AutoCalculateBounds)
@@ -66,6 +69,7 @@ namespace eviltwo.RuntimeThumbnails
                             Mathf.Abs(Vector3.Dot(corner, camRight)) / aspect);
                         minDepthOffset = Mathf.Min(minDepthOffset, Vector3.Dot(corner, camForward));
                     }
+
                     Camera.orthographicSize = maxHalfHeight;
                     distance = Mathf.Max(-minDepthOffset + Camera.nearClipPlane + 0.01f, maxHalfHeight);
                 }
@@ -135,28 +139,29 @@ namespace eviltwo.RuntimeThumbnails
                         distance = Mathf.Max(distance, requiredForFov, requiredForNearClip);
                     }
                 }
-                Camera.transform.position = bounds.center - camForward * distance + cameraOffsetV * camUp + cameraOffsetH * camRight;
-                Camera.transform.rotation = rotation;
 
-                return base.GenerateThumbnail();
+                using (new TransformRestoreScope(Camera.transform))
+                {
+                    Camera.transform.position = bounds.center - camForward * distance + cameraOffsetV * camUp + cameraOffsetH * camRight;
+                    Camera.transform.rotation = rotation;
+                    return base.GenerateThumbnail();
+                }
             }
         }
 
-        private class ObjectAdjustScope : System.IDisposable
+        private class TransformRestoreScope : System.IDisposable
         {
             private readonly Transform _transform;
             private readonly Transform _parent;
             private readonly Vector3 _position;
             private readonly Quaternion _rotation;
 
-            public ObjectAdjustScope(Transform transform, Vector3 adjustPosition)
+            public TransformRestoreScope(Transform transform)
             {
                 _transform = transform;
                 _position = _transform.position;
                 _rotation = _transform.rotation;
                 _parent = _transform.parent;
-                _transform.SetParent(null);
-                _transform.SetPositionAndRotation(adjustPosition, Quaternion.identity);
             }
 
             public void Dispose()

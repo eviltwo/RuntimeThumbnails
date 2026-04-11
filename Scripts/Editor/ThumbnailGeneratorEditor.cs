@@ -43,7 +43,7 @@ namespace eviltwo.RuntimeThumbnails
                 float aspect = (float)_previewTexture.width / _previewTexture.height;
                 float size = Mathf.Min(128f, EditorGUIUtility.currentViewWidth - 20f);
                 var rect = GUILayoutUtility.GetRect(size, size / aspect, GUILayout.ExpandWidth(false));
-                EditorGUI.DrawPreviewTexture(rect, _previewTexture);
+                EditorGUI.DrawTextureTransparent(rect, _previewTexture);
             }
         }
     }
