@@ -7,18 +7,15 @@ Generate Texture2D from Game Object or prefab using a camera at runtime.
 tex = thumbnailGenerator.Generate();
 
 // Game Object
-objectThumbnailGenerator.Target = targetObject;
+objectThumbnailGenerator.TargetObject = targetObject;
 tex = objectThumbnailGenerator.Generate();
 
-// prefab
-prefabThumbnailGenerator.Prefab = targetPrefab;
+// Prefab
+prefabThumbnailGenerator.TargetObject = targetPrefab;
 tex = prefabThumbnailGenerator.Generate();
 ```
+<img height="400" alt="image" src="https://github.com/user-attachments/assets/e3c110d0-3ceb-4853-9ef8-8dc2ca008f78" />
 
-<img width="99" height="98" alt="image" src="https://github.com/user-attachments/assets/78d3cfd3-955b-4c6c-9590-fdda13cc1abd" />
-<img width="98" height="99" alt="image" src="https://github.com/user-attachments/assets/285b3a1f-43f0-4fcd-9761-26d9932c40e2" />
-<br>
-<img width="200" alt="image" src="https://github.com/user-attachments/assets/1e4165ec-9fc4-42a1-ac5a-0183b5f21fec" />
 
 # Import via UPM
 
