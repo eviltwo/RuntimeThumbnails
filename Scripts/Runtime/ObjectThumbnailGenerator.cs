@@ -3,11 +3,9 @@ using UnityEngine;
 
 namespace eviltwo.RuntimeThumbnails
 {
-    public class ObjectThumbnailGenerator : MonoBehaviour
+    public class ObjectThumbnailGenerator : ThumbnailGenerator
     {
-        public Camera Camera;
-
-        public Vector2Int Resolution = new(128, 128);
+        public GameObject TargetObject;
 
         public Vector3 CapturePosition = new(1000, 1000, 1000);
 
@@ -17,35 +15,18 @@ namespace eviltwo.RuntimeThumbnails
 
         public Bounds ManualBounds = new(Vector3.zero, Vector3.one);
 
-        private void Reset()
-        {
-            Camera = GetComponent<Camera>();
-            if (Camera == null)
-            {
-                Camera = FindAnyObjectByType<Camera>(FindObjectsInactive.Exclude);
-            }
-        }
-
-        public Texture2D GeneratePrefabThumbnail(GameObject targetPrefab)
-        {
-            var ga = Instantiate(targetPrefab);
-            var tex = GenerateObjectThumbnail(ga);
-            Destroy(ga);
-            return tex;
-        }
-
         private readonly List<Renderer> _rendererCache = new();
 
-        public Texture2D GenerateObjectThumbnail(GameObject targetObject)
+        public override Texture2D GenerateThumbnail()
         {
-            using (new ObjectAdjustScope(targetObject.transform, CapturePosition))
+            using (new ObjectAdjustScope(TargetObject.transform, CapturePosition))
             {
                 // Calculate object size
                 Bounds bounds;
                 if (AutoCalculateBounds)
                 {
-                    targetObject.GetComponentsInChildren(_rendererCache);
-                    bounds = new Bounds(targetObject.transform.position, Vector3.zero);
+                    TargetObject.GetComponentsInChildren(_rendererCache);
+                    bounds = new Bounds(TargetObject.transform.position, Vector3.zero);
                     foreach (var r in _rendererCache)
                     {
                         bounds.Encapsulate(r.bounds);
@@ -53,7 +34,7 @@ namespace eviltwo.RuntimeThumbnails
                 }
                 else
                 {
-                    bounds = new Bounds(targetObject.transform.position + ManualBounds.center, ManualBounds.size);
+                    bounds = new Bounds(TargetObject.transform.position + ManualBounds.center, ManualBounds.size);
                 }
 
                 // Move camera
@@ -156,22 +137,7 @@ namespace eviltwo.RuntimeThumbnails
                 Camera.transform.position = bounds.center - camForward * distance + cameraOffsetV * camUp + cameraOffsetH * camRight;
                 Camera.transform.rotation = rotation;
 
-                // Render
-                var tempRT = RenderTexture.GetTemporary(Resolution.x, Resolution.y, 32);
-                Camera.targetTexture = tempRT;
-                Camera.Render();
-
-                // Print to Texture
-                var beforeActiveRT = RenderTexture.active;
-                RenderTexture.active = tempRT;
-                var tex = new Texture2D(Resolution.x, Resolution.y, TextureFormat.RGBA32, false);
-                tex.ReadPixels(new Rect(0, 0, Resolution.x, Resolution.y), 0, 0);
-                tex.Apply(false, true);
-                Camera.targetTexture = null;
-                RenderTexture.active = beforeActiveRT;
-                RenderTexture.ReleaseTemporary(tempRT);
-
-                return tex;
+                return base.GenerateThumbnail();
             }
         }
 
